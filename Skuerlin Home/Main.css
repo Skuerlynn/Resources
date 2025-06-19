@@ -1,0 +1,84 @@
+/*Defaults*/
+* {
+    font-size: 15px;
+    font-family: Arial;
+}
+
+/*Überschriften*/
+.Uberschrift {
+    font-size: 45px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    color: (114,137,218);
+    padding: 5px;
+    border: 2px solid black;
+    background-color: #424549;
+    text-shadow: 2px 2px 2px rgba(255, 255, 255, 0.475); 
+    font-weight: 600;
+}
+
+/*Schaltflächen*/
+.Game-Profiles a, .Common a, .Google a, .PoeTools a, .Notes a {
+    margin-top: 5px;
+    margin :5px;
+    background-color: #7289da92;
+    padding: 15px;
+    border-color: black  ;
+    border: 4px solid black;
+    color: #020613;
+    text-decoration: none;
+    display: inline-block;
+    width: 150px;
+    height: 45px;
+    vertical-align: top;
+    text-align: bottom;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.66)  ;
+    font-weight: bold
+;
+    
+
+}
+body {
+  background:  #1e2124;
+  
+  
+
+}
+
+.searchbar , .Ysearchbar , .OPsearchbar {
+  margin-top: 5px;
+  margin :5px;
+  background-color: #a7b6f0d4;
+  padding: 5px;
+  border-color: black  ;
+  border: 4px solid black;
+  color: #020613;
+  text-decoration: none;
+  display: inline-block;
+  width: 250px;
+  height: 25px;
+  vertical-align: top;
+  text-align: bottom;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.66)  ;
+  font-weight: bold ;
+  font-size: 25px;
+  left: 500px;
+  position: absolute;
+}
+.searchbar::placeholder , .Ysearchbar::placeholder , .OPsearchbar::placeholder{
+  color: #0206139d;
+  vertical-align: top;
+  font-size: 25px;
+  
+}
+
+a.Gsearch , a.Ysearch , a.OPsearch{
+width: 40px;
+height: 40px;
+padding: 0px;
+display: inline-block;
+margin: 0px;
+margin-top: 2px;
+  left: 750px;
+  position: absolute;
+}

@@ -1,0 +1,50 @@
+.videopreviews {
+display: grid ; 
+column-gap :10px ;
+vertical-align: middle;
+grid-template-columns: 200px 200px 200px;
+row-gap: 15px;
+}
+.desc {
+display: grid;
+grid-template-columns: 25px 1fr;
+margin: 0px ;
+padding: 0px;
+font-size: 0px
+}
+.title {
+font-family: Arial, Helvetica, sans-serif ;
+font-size: 9px; 
+font-weight: 600; 
+margin-top: 3px; 
+margin-left: 3px; 
+margin-bottom: 4px;
+}
+.author {
+font-size: 8px ; 
+padding-bottom: 0px; 
+margin-bottom: 0px; 
+font-weight: 400px; 
+color : brown; 
+margin-top: 0px
+}
+.views {
+font-size: 7px ;
+font-weight: 400px;
+color : brown;
+margin-top: 0px
+}
+
+.thumbnail {
+position: relative;
+}
+.length {
+position: absolute;
+bottom: 5px;
+right: 1px;
+z-index: 2;
+background-color: rgba(116, 116, 116, 0.436);
+margin: 0px;
+padding: 1px;
+
+}

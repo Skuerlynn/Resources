@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .calculator1 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            
+            width: 300px;
+            height:500px;
+
+        }
+
+        .calculatorbutton {
+            width: 100px;
+            height: 100px;
+
+
+}
+        .calculatorbutton2 {
+            width: 80px;
+            height: 80px;
+            margin: 10px;
+
+
+}
+    </style>
+    <title>Calculation</title>
+</head>
+<body>
+<div class="calculator1">
+<button class="calculatorbutton"
+onclick="historyvar= '1 + '"
+>1</button>
+<button class="calculatorbutton">2</button>
+<button class="calculatorbutton">3</button>
+<button class="calculatorbutton">4</button>
+<button class="calculatorbutton">5</button>
+<button class="calculatorbutton">6</button>
+<button class="calculatorbutton">7</button>
+<button class="calculatorbutton">8</button>
+<button class="calculatorbutton">9</button>
+
+<button class="calculatorbutton2">+</button>
+<button class="calculatorbutton2">-</button>
+<button class="calculatorbutton2">*</button>
+<button class="calculatorbutton2">/</button>
+<button class="calculatorbutton2">C</button>
+<button class="calculatorbutton2">=</button>
+</div>
+
+<button id = solution class="solution" style="position: absolute; top: 200px; right: 400px ; width: 250px; height: 100px;">SOLUTION</button>
+<button id = history class="History" style="position: absolute; top: 50px; left: 320px ; width: 550px; height: 100px;">history</button>
+
+
+</body>
+<script>
+    let historyvar =""
+    let solutionvar =""
+
+
+  document.getElementById("History").innerText = historyvar;
+  document.getElementById("solution").innerText = solutionvar;
+
+
+</script>
+</html>
