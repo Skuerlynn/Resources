@@ -9,6 +9,11 @@
   flex-direction: row;
 }
 
+@media screen and (max-width: 1000px) {
+.buttons {
+  flex-wrap: wrap;
+}
+}
 
 /*Schaltflächen*/
 .buttons a {
@@ -24,9 +29,8 @@
     vertical-align: top;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.66)  ;
     font-weight: bold;
-    flex-direction: row;
-    flex: 1;
-    
+
+    min-width: 200px;
 
 }
 body {
@@ -34,7 +38,7 @@ body {
 }
 
 .searchbar , .Ysearchbar , .OPsearchbar {
-  margin-top: 5px;
+
   margin :5px;
   background-color: #a7b6f0d4;
   padding: 5px;
@@ -50,7 +54,7 @@ body {
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.66)  ;
   font-weight: bold ;
   font-size: 25px;
-  left: 500px;
+  left: 340px;
   position: absolute;
 }
 .searchbar::placeholder , .Ysearchbar::placeholder , .OPsearchbar::placeholder{
@@ -65,12 +69,13 @@ padding: 0px;
 display: inline-block;
 margin: 0px;
 margin-top: 2px;
-  left: 750px;
+  left: 630px;
   position: absolute;
 }
 .Uberschrift {
     font-size: 45px;
     margin-bottom: 5px;
+    min-width: 800px;
     margin-top: 5px;
     color: (114,137,218);
     padding: 5px;
