@@ -2,22 +2,36 @@
 <html>
 <head>
   <meta charset="UTF-8" />
-  <title>Document Object Model (DOM)</title>
+  <title>DOM</title>
 </head>
 <body>
-  <button>hello</button>
+  <button onclick="Reset()">hello</button>
+  <button class="Button2">Second Button</button> 
 
-</body>
+
 
 <script>
+console.log(document.querySelector("button").innerHTML);
 
+document.querySelector("button").innerHTML = "Changed Again";
+document.querySelector(".Button2").innerHTML = "Also changed" ;  //like CSS put a button in frost to look for a Class atrribute
+const buttonElement =  document.querySelector(".Button2");
+console.log(buttonElement)
 
+  /*
+  console.log(document.title);
+// document.body.innerHTML = "hello"; // removes everything and just says "hello"
+document.title = "Document Object Model"
+  console.log(document.title);
 
+console.log(document.body);
 
-
-
+function Reset () {
+document.body.innerHTML = "changed"
+};*/
 
 
 
 </script>
+</body>
 </html>

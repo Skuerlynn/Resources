@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rock Paper Scissors 3</title>
+</head>
+<body>
+
+
+    
+<p>Rock Paper Scissors</p>
+
+    <button onclick="
+resultCalc('Rock')
+    ">Rock</button>
+
+    <button onclick="
+resultCalc('Paper')
+    ">Paper</button>
+
+    <button onclick="
+resultCalc('Scissors')
+    ">Scissors</button>
+
+    <button onclick="
+localStorage.removeItem(score);
+score.wins = 0;
+score.losses = 0;
+score.ties = 0;
+updatescore();
+    ">reset</button>
+
+<p class="js-event"><br></p>
+<p class="js-score"> </p>
+
+
+</body>
+
+<script>
+
+console.log(localStorage.getItem("score"));
+
+
+let score = JSON.parse(localStorage.getItem("score")) || 
+       {wins : 0,
+        ties : 0,
+        losses : 0};
+
+updatescore()
+
+function updatescore () { document.querySelector('.js-score').innerHTML = 
+`Wins = ${score.wins} 
+Losses = ${score.losses} 
+Ties = ${score.ties}`}
+
+//  if (!score) { //check if score is true (would be null if nothing is inside score)
+// score = {
+//     wins : 0,
+//    ties : 0,
+//    losses : 0}
+    
+
+function resultCalc(playermove){
+    let computerMove
+    let randomnumber
+
+
+    randomnumber = Math.random();
+    if (randomnumber >= 0 && randomnumber <1/3) {computerMove = 'Rock'}
+    else if (randomnumber > 1/3 && randomnumber <2/3) {computerMove = 'Paper'}
+    else if (randomnumber >= 2/3) {computerMove = 'Scissors'}
+
+
+    if (playermove ==  computerMove ) {score.ties++ ; document.querySelector('.js-event').innerHTML = (`you and computer both chose ${playermove} and its a draw.`)}
+    else if ((playermove == 'Paper' && computerMove == 'Rock') || (playermove == 'Rock' && computerMove == 'Scissors') || (playermove == 'Scissors' && computerMove == 'Paper')) 
+        {score.wins++ ; document.querySelector('.js-event').innerHTML = (`you picked ${playermove} and computer took ${computerMove} so you win.`)} 
+    else {score.losses++ ; document.querySelector('.js-event').innerHTML = (`you picked ${playermove} and computer took ${computerMove} so you lose. `)}    
+
+localStorage.setItem("score", JSON.stringify(score))
+updatescore() };
+          
+</script>
+</html>

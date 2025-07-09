@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DOM Projects</title>
+</head>
+<body>
+
+  <p> Youtube Subscribe Button </p>
+
+<button class="aboBUTTON" onclick="subscribe()">SUBSCRIBE</button>
+
+ <p>Lieferkosten</p>
+ <p> Bestellungen unter 40€ = 10€</p>
+ <p> Ab 50€ Versandtkostenfrei</p>
+
+ <input class="js-warenkorbwert"> <button onclick="calculate ()">Calculate</button>
+ <p class="js-shipment-total"></p> 
+
+
+<script>
+
+function calculate () {
+const Eingame = parseFloat('.js-warenkorbwert').innerHTML;
+
+
+if (Eingame >= 50) {document.querySelector('.js-shipment-total').innerHTML = ('.js-warenkorbwert').innerHTML}
+else {document.querySelector('.js-shipment-total').innerHTML = ('.js-warenkorbwert').innerHTML + 10}
+
+
+}
+
+
+function subscribe () {
+const subscribestatus = document.querySelector('.aboBUTTON')
+  if (subscribestatus.innerHTML === 'SUBSCRIBE') {subscribestatus.innerHTML = 'SUBSCRIBED'}
+  else {subscribestatus.innerHTML = 'SUBSCRIBE'}
+}
+
+
+
+
+</script>
+
+
+</body>
+</html>
