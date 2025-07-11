@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .calculator1 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            
+            width: 300px;
+            height:500px;
+
+        }
+
+        .calculatorbutton {
+            width: 100px;
+            height: 100px;
+
+
+}
+        .calculatorbutton2 {
+            width: 80px;
+            height: 80px;
+            margin: 10px;
+
+
+}
+    </style>
+    <title>Calculation</title>
+</head>
+<body>
+<div class="calculator1">
+<button class="calculatorbutton" onclick= "addtohistory(1)">1</button>
+<button class="calculatorbutton" onclick= "addtohistory(2)">2</button>
+<button class="calculatorbutton" onclick= "addtohistory(3)">3</button>
+<button class="calculatorbutton" onclick= "addtohistory(4)">4</button>
+<button class="calculatorbutton" onclick= "addtohistory(5)">5</button>
+<button class="calculatorbutton" onclick= "addtohistory(6)">6</button>
+<button class="calculatorbutton" onclick= "addtohistory(7)">7</button>
+<button class="calculatorbutton" onclick= "addtohistory(8)">8</button>
+<button class="calculatorbutton" onclick= "addtohistory(9)">9</button>
+
+<button class="calculatorbutton2" onclick= "addtohistory('+')">+</button>
+<button class="calculatorbutton2" onclick= "addtohistory('-')">-</button>
+<button class="calculatorbutton2" onclick= "addtohistory('*')">*</button>
+<button class="calculatorbutton2" onclick= "addtohistory('/')">/</button>
+<button class="calculatorbutton2" onclick= "addtohistory(11)">C</button>
+<button class="calculatorbutton2" onclick="Calculate()">=</button>
+</div>
+
+<button id = solution class="solution" style="position: absolute; top: 200px; right: 400px ; width: 250px; height: 100px;">SOLUTION</button>
+<button id = history class="History" style="position: absolute; top: 50px; left: 320px ; width: 550px; height: 100px;">history</button>
+
+
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.0/math.min.js"></script>
+<script>
+function addtohistory (Cinput) {
+
+let formel = document.querySelector('#history').innerHTML
+
+if (formel === 'history') {
+    formel = ""
+    document.querySelector('#history').innerHTML = ""}
+
+if (Cinput === 11) {document.querySelector('#history').innerHTML = ""}
+else {document.querySelector('#history').innerHTML = `${formel}${Cinput}`}
+
+console.log(formel)
+
+
+
+
+
+
+}
+
+
+function Calculate () {
+ document.querySelector('#solution').innerHTML =  math.evaluate(document.querySelector('#history').innerHTML)
+
+
+}
+
+</script>
+</html>
