@@ -1,32 +1,29 @@
-
-let todolist = []
-let HTML = ""
-
-    function ADDTODO () {
-    let inputElement = ""
-    inputElement = document.querySelector('.TaskInput').value
-    todolist.push(inputElement)
-    document.querySelector('.TaskInput').value = ""
+let htmlAdd = ""
+let tasklist = []
 
 
-document.querySelector('.js-todo').innerHTML = ""
-for (i = 0 ; i < todolist.length ; i++) {
+function ADDTODO () {
 
-if (i/1 == 1/i)
-if (i/2 == 2/i)
-if (i/3 == 3/i)
-
-    HTML = `<p class = color${i} >${todolist[i]}</p>`
-
-
-
-
-    document.querySelector('.js-todo').innerHTML += HTML
+tasklist.push(document.querySelector('.TASKINPUT').value) 
+document.querySelector('.TASKINPUT').value = ""
+console.log(tasklist);
+DISPLAYARRAY()
 }
-    todolist.push('83')
 
 
- console.log(todolist)
+function DISPLAYARRAY () {
+
+document.querySelector('.JSTODO').innerHTML = ""
+for (i = 0 ; i<tasklist.length ; i++)
+document.querySelector('.JSTODO').innerHTML += `<p>${tasklist[i]}</p> <button onclick="REMOVEDATA(${[i]})">delete</button>`
+
+}
+
+function REMOVEDATA (position) {
+
+tasklist.splice(position,1)
+DISPLAYARRAY()
 
 
-    }
+}
+
