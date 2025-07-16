@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Arrays and Loops</title>
+</head>
+<body>
+<button style="height: 200px;  width: 600px; font-size: 100px;"  class="debug">Debug</button>
+
+<script>
+/*
+let myArray = [10, 20, 30];
+
+
+
+console.log(myArray[1])
+console.log(myArray.length)
+console.log(myArray.splice(2, 3)) //2 = remove   the index 2 (3rd number) , 3= the next 3 numbers
+
+myArray.push(100)
+document.querySelector('.debug').innerHTML = myArray
+*/
+
+
+/*let i = 1;
+
+while(i <=7) {
+i++
+console.log(i);
+}
+for (let i = 1; i <=5; i++)  {
+console.log(i);
+}
+
+let randomNumber = 0;
+
+while (randomNumber <=0.5 ) {
+  randomNumber = Math.random();
+}
+  console.log(randomNumber);
+
+
+
+//Looping through an Array
+const TodoList = ['make dinner' , 'wash dishes' , 'watch youtube'];
+//i = commonly used for INDEX // for loops = statr , condition , increment 
+for (let i= 0; i < TodoList.length; i++) {
+  const Value = (TodoList[i])
+  console.log(Value)
+}
+*/
+
+
+
+
+// ACCUMULATOR PATTERN
+//make a TOTAL that adds array[0] + array[1] +array [2] until INDEX [i] hits Index.length 
+
+const Numbers = [1,7,3];
+let Total = 0;
+
+for (let i = 0 ; i< Numbers.length ; i++) {
+const Number = Numbers[i];
+Total = Total + Number;
+
+}
+console.log(Numbers[0]);
+
+let Duplication = []
+
+for (let i = 0 ; i < Numbers.length ; i++) {
+Duplication[i] = (Numbers[i] * 2)
+}
+console.log(Duplication)
+
+
+</script>
+
+</body>
+</html>
