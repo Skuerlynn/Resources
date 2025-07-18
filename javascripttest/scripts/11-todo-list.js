@@ -1,21 +1,27 @@
-let htmlAdd = ""
 let tasklist = []
+
+let taskinput = ""
+let dateinput = ""
 
 
 function ADDTODO () {
+taskinput = document.querySelector('.TASKINPUT').value
+dateinput = document.querySelector('.DATEINPUT').value
 
-tasklist.push(document.querySelector('.TASKINPUT').value) 
-document.querySelector('.TASKINPUT').value = ""
+if (taskinput && dateinput != "") {
+tasklist.push({ task: taskinput, date: dateinput });
+
+taskinput = ""
 console.log(tasklist);
-DISPLAYARRAY()
+DISPLAYARRAY()}
 }
 
 
 function DISPLAYARRAY () {
 
-document.querySelector('.JSTODO').innerHTML = ""
+document.querySelector('.JSTODO').innerHTML =""
 for (i = 0 ; i<tasklist.length ; i++)
-document.querySelector('.JSTODO').innerHTML += `<p>${tasklist[i]}</p> <button onclick="REMOVEDATA(${[i]})">delete</button>`
+document.querySelector('.JSTODO').innerHTML += `<p>${tasklist[i].task}</p> <p>${tasklist[i].date}</p> <button onclick="REMOVEDATA(${[i]})">delete</button><br>`
 
 }
 

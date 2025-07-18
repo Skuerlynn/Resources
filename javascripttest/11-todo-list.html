@@ -10,10 +10,11 @@
 
   <p>Todo List Practice 1</p>
 
-  <input placeholder="TASKINPUT" class="TASKINPUT">
-  <button onclick="ADDTODO()">ADDTODO</button>
+  <input placeholder="TASKINPUT" class="TASKINPUT" onkeydown="if (event.key == 'Enter') {ADDTODO()}">
+  <input type="date" class="DATEINPUT">
+  <button onclick="ADDTODO()" >ADDTODO</button>
 
-<div class="JSTODO todoCSS" >JSTODO</div>
+<div class="JSTODO todoCSS" ></div>
 
 
 

@@ -1,26 +1,10 @@
-.todoCSS p.color0 {
-
-background-color: rgb(79, 186, 186);
-height: 19px;
-
+.JSTODO p {
+display: inline-block;
+background-color: rgb(118, 118, 203);
+width: 200px;
 }
 
-.todoCSS p.color1 {
-
-background-color: rgb(186, 91, 79);
-height: 19px;
-
-}
-
-.todoCSS p.color2 {
-
-background-color: rgb(141, 186, 79);
-height: 19px;
-
-}
-.todoCSS p.color3 {
-
-background-color: rgb(79, 186, 93);
-height: 19px;
-
+.JSTODO p {
+display: inline-block;
+width: 200px;
 }
