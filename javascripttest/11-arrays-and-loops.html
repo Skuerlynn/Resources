@@ -7,6 +7,8 @@
 <button style="height: 200px;  width: 600px; font-size: 100px;"  class="debug">Debug</button>
 
 <script>
+
+  //function  notes {
 /*
 let myArray = [10, 20, 30];
 
@@ -55,7 +57,7 @@ for (let i= 0; i < TodoList.length; i++) {
 // ACCUMULATOR PATTERN
 //make a TOTAL that adds array[0] + array[1] +array [2] until INDEX [i] hits Index.length 
 
-const Numbers = [1,7,3];
+/*const Numbers = [1,7,3];
 let Total = 0;
 
 for (let i = 0 ; i< Numbers.length ; i++) {
@@ -70,7 +72,61 @@ let Duplication = []
 for (let i = 0 ; i < Numbers.length ; i++) {
 Duplication[i] = (Numbers[i] * 2)
 }
+console.log(Duplication)*/
+
+
+/*const array1 = [1,2,3]
+const [NR1, NR2, NR3] = array1
+const [one , two , three] = [1, 2, 3]*/
+
+/*for (let i = 1; i <= 10 ; i++){
+
+ // if (i % 2){continue}
+ if (i % 2 === 1){continue}
+  //if (i===7){break}
+    console.log(i)
+}*/
+
+/*let i = 1;
+
+while (i <=10) {
+if (i%3 ===0) {
+  i++
+  continue;}
+}
+/*
+
+let Duplication = []
+
+for (let i = 0 ; i < Numbers.length ; i++) {
+Duplication[i] = (Numbers[i] * 2)
+}
 console.log(Duplication)
+
+// return breaks , and "replaces the function" with the value after return 
+// output = (function1(input)) 
+
+//arrayNAME.splice = arrayOthername = copy of array
+//arayname = arrayname2 = pointless 
+}*/
+
+let searchbox = ['salat' , 'brot' , 'sauce' , 'gurke' , 'tomate']
+
+for (i = 0 ; i < searchbox.length ; i++) {
+if (searchbox[i] === 'sauce') {console.log(`${[i+1, searchbox[i]]}`)} 
+else {console.log('not found')}}
+
+for (i = 0 ; i < 20 ; i++) {
+
+if (i % 3 === 0 && i % 5 === 0) {console.log('FIZZBUZZ')}
+else if (i % 3 === 0){console.log('FIZZ')}
+else if (i % 5 === 0){console.log('BUZZ')}
+else {console.log([i])}
+
+
+
+}
+
 
 
 </script>
