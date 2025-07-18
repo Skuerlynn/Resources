@@ -10,15 +10,15 @@
 <p>Rock Paper Scissors</p>
 
     <button onclick="
-resultCalc('Rock')
+play('Rock')
     ">Rock</button>
 
     <button onclick="
-resultCalc('Paper')
+play('Paper')
     ">Paper</button>
 
     <button onclick="
-resultCalc('Scissors')
+play('Scissors')
     ">Scissors</button>
 
     <button onclick="
@@ -31,52 +31,82 @@ updatescore();
 
 <p class="js-event"><br></p>
 <p class="js-score"> </p>
+<br>
+<button onclick="Autoplay()">Autoplay</button>
 
+<button onclick="printvalues()">DEBUG</button>
+
+<p class="abc1">1</p>
+<p class="abc2">2</p>
+<p class="abc3">3</p>
 
 </body>
 
 <script>
 
-console.log(localStorage.getItem("score"));
+function printvalues() {
+document.querySelector('.abc1').innerHTML = `computermove = ${computerMove}`
+document.querySelector('.abc2').innerHTML = `playermove = ${playermove}`
+document.querySelector('.abc3').innerHTML = `autoplay = ${autoplay}`
+}
 
+    let autoplay = false
+    let playermove = ""
+    let computerMove = ""
+    let intervalID1;
+
+function Autoplay () {
+    
+    if (autoplay == true){autoplay = false , clearInterval(intervalID1) }
+    else {autoplay= true
+
+            setInterval(function() {
+
+            play()
+
+        },100)
+                          }
+    }
+
+console.log(localStorage.getItem("score"));
 
 let score = JSON.parse(localStorage.getItem("score")) || 
        {wins : 0,
         ties : 0,
         losses : 0};
-
 updatescore()
-
 function updatescore () { document.querySelector('.js-score').innerHTML = 
 `Wins = ${score.wins} 
 Losses = ${score.losses} 
 Ties = ${score.ties}`}
 
-//  if (!score) { //check if score is true (would be null if nothing is inside score)
-// score = {
-//     wins : 0,
-//    ties : 0,
-//    losses : 0}
+function play(playerinput){
 
+    genComputemove()
+if (autoplay == true) {playermove = computerMove , genComputemove()}
+    else {playermove = playerinput}
+    printvalues()
+    calculateRPS (playermove)
+}
 
-function resultCalc(playermove){
-    let computerMove
+function genComputemove() {
     let randomnumber
-
-
     randomnumber = Math.random();
     if (randomnumber >= 0 && randomnumber <1/3) {computerMove = 'Rock'}
     else if (randomnumber > 1/3 && randomnumber <2/3) {computerMove = 'Paper'}
     else if (randomnumber >= 2/3) {computerMove = 'Scissors'}
+}
 
-
+function calculateRPS (playermove) {
     if (playermove ==  computerMove ) {score.ties++ ; document.querySelector('.js-event').innerHTML = (`you and computer both chose ${playermove} and its a draw.`)}
     else if ((playermove == 'Paper' && computerMove == 'Rock') || (playermove == 'Rock' && computerMove == 'Scissors') || (playermove == 'Scissors' && computerMove == 'Paper')) 
-        {score.wins++ ; document.querySelector('.js-event').innerHTML = (`you picked ${playermove} and computer took ${computerMove} so you win.`)} 
+    {score.wins++ ; document.querySelector('.js-event').innerHTML = (`you picked ${playermove} and computer took ${computerMove} so you win.`)} 
     else {score.losses++ ; document.querySelector('.js-event').innerHTML = (`you picked ${playermove} and computer took ${computerMove} so you lose. `)}    
+    localStorage.setItem("score", JSON.stringify(score))
+    updatescore() ;
+}
 
-localStorage.setItem("score", JSON.stringify(score))
-updatescore() };
+
           
 </script>
 </html>
