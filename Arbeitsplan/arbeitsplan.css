@@ -1,0 +1,65 @@
+.body {
+margin: 0px;
+
+
+}
+
+
+.plan {
+display: none;
+}
+
+#cssSettingsHeader {
+font-size: 30px;
+
+}
+
+
+#SettingsDescriptions {
+display: inline-block;
+width: 100px;
+
+}
+
+
+#SettingsDescriptionsSmall {
+display: inline-block;
+width: 40px;
+font-size: 4px;
+
+}
+
+
+.Mitarbeitereintrag {
+display: block;
+align-items:baseline;
+background-color: aqua;
+
+}
+
+.StandortSettings {
+display: flex;
+width: 50%;
+
+}
+
+.SettingsWerktage {
+flex: 3;
+background-color: rgba(0, 255, 255, 0.432);
+}
+
+.SettingsSamstage {
+flex: 3;
+background-color: rgba(119, 255, 0, 0.306);
+}
+
+.SettingsBesetzung {
+flex: 1;
+background-color: rgba(35, 40, 32, 0.091);
+}
+
+
+
+.EingabeZahl {
+width: 10px;
+}
