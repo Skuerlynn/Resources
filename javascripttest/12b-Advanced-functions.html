@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Advanced 2</title>
+</head>
+<body>
+  
+  <button class="JSCLICK">Click</button>
+
+
+
+
+  <script>
+
+
+    const Button = document.querySelector(".JSCLICK")
+
+    const Eventfunction = () => {console.log("clicked")}
+    const Eventfunction2 = () => {console.log("clicked2")}
+
+    Button.addEventListener('click', Eventfunction);
+    Button.addEventListener('click', Eventfunction2);
+    Button.removeEventListener('click', Eventfunction2)
+
+    console.log([1, -3, 5].filter((value, index) => {
+    //  if (value >= 0) {return true} 
+      return value >= 0;
+    }))
+
+
+console.log([1, 1, 3].map((value , index) => {
+
+//return 10
+return value + 10
+
+
+}));
+
+
+console.log([1, 1, 3].map(value => value + 10));
+
+
+    
+    </script>
+</body>
+</html>

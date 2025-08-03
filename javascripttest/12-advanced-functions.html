@@ -6,8 +6,48 @@
 <body>
   
 
+<button class="buttonJS" onclick="LOAD()">Start</button>
+<button class="button2JS" onclick="ADDTOCRAT()">Add to Cart</button>
+<p class="below"></p>
 
   <script>
+
+function LOAD() {
+
+document.querySelector('.buttonJS').innerHTML = "LOADING...."
+
+setTimeout(() => {document.querySelector('.buttonJS').innerHTML = "Finished!"}, 3000)
+
+}
+
+
+let timerID;
+
+function ADDTOCRAT() {
+
+clearTimeout(timerID)
+
+timerID = setTimeout(function() {document.querySelector('.below').innerHTML = ""},3000)
+document.querySelector('.below').innerHTML = "Added To cart!"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*function greeting () {
 
   console.log('hello')
@@ -16,9 +56,22 @@ greeting()*/
 
 
 
-setTimeout(function( ){console.log('timeot')} , 3000 );
+//setTimeout(function( ){console.log('timeot')} , 3000 );
 
-setInterval(function(){console.log('Intervall'), 3000})
+//setInterval(function(){console.log('Intervall'), 3000})
+
+
+/*[
+  'abc',
+  'def',
+  'ghi'
+].forEach(function(value , indexNr) {
+
+  if (value === 'def') {return}
+  console.log(value)
+  console.log(indexNr)
+
+})*/
 
   </script>
 </body>

@@ -9,17 +9,10 @@
     
 <p>Rock Paper Scissors</p>
 
-    <button onclick="
-play('Rock')
-    ">Rock</button>
+    <button class= "rockbutton">Rock (q) </button>
+    <button class= "paperbutton">Paper (w) </button>
+    <button class= "scissorsbutton">Scissors (e) </button>
 
-    <button onclick="
-play('Paper')
-    ">Paper</button>
-
-    <button onclick="
-play('Scissors')
-    ">Scissors</button>
 
     <button onclick="
 localStorage.removeItem(score);
@@ -43,6 +36,19 @@ updatescore();
 </body>
 
 <script>
+
+
+document.querySelector('.rockbutton').addEventListener('click' , () => {play('Rock')}) 
+document.querySelector('.paperbutton').addEventListener('click' , () => {play('Paper')})
+document.querySelector('.scissorsbutton').addEventListener('click' , () => {play('Scissors')})
+
+document.body.addEventListener('keydown' , () => {
+    if (event.key === 'q') {play('Rock')}
+    if (event.key === 'w') {play('Paper')}
+    if (event.key === 'e') {play('Scissors')}
+})
+
+
 
 function printvalues() {
 document.querySelector('.abc1').innerHTML = `computermove = ${computerMove}`
