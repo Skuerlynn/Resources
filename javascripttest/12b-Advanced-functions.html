@@ -19,6 +19,7 @@
     const Eventfunction = () => {console.log("clicked")}
     const Eventfunction2 = () => {console.log("clicked2")}
 
+    setTimeout(() => {console.log('3000')},3000)
     Button.addEventListener('click', Eventfunction);
     Button.addEventListener('click', Eventfunction2);
     Button.removeEventListener('click', Eventfunction2)
