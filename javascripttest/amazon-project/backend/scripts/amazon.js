@@ -1,55 +1,26 @@
-const products = [{ //Data Structure
-  Image: 'images/products/athletic-cotton-socks-6-pairs.jpg',
-  Name: 'Black and Gray Athletic Cotton Socks - 6 Pairs',
-  Rating: {
-    stars: 4.5,
-    count: 87
-  },
-  PriceCents: 1090
-},
-{
-  Image: 'images/products/intermediate-composite-basketball.jpg',
-  Name: 'Intermediate Size Basketball',
-  Rating: {
-    stars: 4,
-    count: 127
-  },
-  PriceCents: 2095
-},
-{
-  Image: 'images/products/adults-plain-cotton-tshirt-2-pack-teal.jpg',
-  Name: 'Adults Plain Cotton T-Shirt - 2 Pack',
-  Rating: {
-    stars: 4.5,
-    count: 56
-  },
-  PriceCents: 799
-},
-];
-
 products.forEach((products) => {
   document.querySelector('.products-grid').innerHTML +=
   `
           <div class="product-container">
           <div class="product-image-container">
             <img class="product-image"
-               src=${products.Image}>
+               src=${products.image}>
           </div>
 
           <div class="product-name limit-text-to-2-lines">
-           ${products.Name}
+           ${products.name}
           </div>
 
           <div class="product-rating-container">
             <img class="product-rating-stars"
-              src="images/ratings/rating-${products.Rating.stars * 10}.png">
+              src="images/ratings/rating-${products.rating.stars * 10}.png">
             <div class="product-rating-count link-primary">
-               ${products.Rating.count}
+               ${products.rating.count}
             </div>
           </div>
 
           <div class="product-price">
-            $${(products.PriceCents / 100).toFixed(2)}
+            $${(products.priceCents / 100).toFixed(2)}
           </div>
 
           <div class="product-quantity-container">
@@ -74,9 +45,28 @@ products.forEach((products) => {
             Added
           </div>
 
-          <button class="add-to-cart-button button-primary">
+          <button class="add-to-cart-button js-add-to-cart button-primary"
+          data-product-Id="${products.name}">
             Add to Cart
           </button>
         </div>
         `;
 })
+document.querySelectorAll('.js-add-to-cart')
+.forEach((button) => {
+  button.addEventListener('click', () => {
+    let buttonName = button.dataset.productId
+    let quantitySelector = Number(document.querySelector('.product-quantity-container').value)
+    console.log(quantitySelector)
+    let itemID = "";
+    cart.forEach((entry) => {if (entry.productName === buttonName) {entry.quantity += quantitySelector ; itemID = entry}})
+    if (itemID.productName !== buttonName) {cart.push(
+    {
+    productName: buttonName,
+    quantity: quantitySelector
+    })}
+    
+    
+  
+  console.log(cart)
+})})
