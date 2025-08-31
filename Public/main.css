@@ -1,0 +1,107 @@
+
+
+body {
+margin-top: 80px;
+background-color: aqua;
+height: 3000px;
+}
+
+
+
+.Header {
+display: flex;
+flex-direction: row;
+background-color: rgb(137, 43, 226);
+top: 0px;
+right: 0px;
+left: 0px;
+margin: 0px;
+position: fixed;
+z-index: 100;
+}
+
+.Headerelement1 , .Headerelement2 , .Headerelement3 {
+flex: 1;
+width: 300px;
+background-color: rgba(0, 0, 0, 0.347);
+padding: 15px;
+}
+.searchbar {
+width: 100%;
+min-width: 500px;
+}
+
+.projects {
+display: flex;
+flex-wrap: wrap;
+
+}
+.project {
+height: 600px;
+background-color: rgba(0, 0, 0, 0.537);
+margin-right: 10px;
+margin-bottom: 10px;
+width: 560px;
+border-style: solid;
+padding: 5px
+}
+
+.project1 {
+height: 600px;
+background-color: rgba(0, 0, 0, 0.537);
+margin-right: 10px;
+margin-bottom: 10px;
+width: 1145px;
+border-style: solid;
+padding: 5px;
+position: relative;
+}
+.project1 img{
+height: 600px;
+background-color: rgba(0, 0, 0, 0.537);
+margin-right: 10px;
+margin-bottom: 10px;
+width: 1145px;
+}
+.project1 p{
+background-color: rgba(127, 172, 236, 0.847);
+position: absolute;
+left: 400px;
+bottom: 45px;
+right: 0px;
+padding: 20px;
+font-size: 30px;
+font-weight: 800;
+border-style: solid;
+border-radius: 10px;
+}
+
+.project {
+height: 600px;
+background-color: rgba(0, 0, 0, 0.537);
+margin-right: 10px;
+margin-bottom: 10px;
+width: 570px;
+border-style: solid;
+padding: 5px;
+position: relative;
+}
+.project img{
+height: 600px;
+background-color: rgba(0, 0, 0, 0.537);
+margin-right: 10px;
+margin-bottom: 10px;
+width: 570px;
+}
+.project p{
+background-color: rgba(127, 172, 236, 0.847);
+position: absolute;
+left: 200px;
+bottom: 45px;
+right: 0px;
+padding: 20px;
+font-size: 30px;
+font-weight: 800;
+border-style: solid;
+border-radius: 10px;
+}

@@ -1,0 +1,40 @@
+.Grid {
+background-color: aqua;
+display: flex;
+}
+
+
+.Spalte {
+
+background-color: rebeccapurple;
+flex: 1;
+margin: 2px;
+}
+
+.Zeile {
+
+background-color: rgb(255, 255, 255);
+flex: 1;
+margin: 2px;
+}
+
+
+.Blau {
+background-color: blue;
+
+}
+
+.Rot {
+background-color: rgb(255, 0, 0);
+
+}
+
+.Weiß {
+background-color: rgb(255, 255, 255);
+
+}
+
+.Schwarz {
+background-color: rgb(0, 0, 0);
+
+}
