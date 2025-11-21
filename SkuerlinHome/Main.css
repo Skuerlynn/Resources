@@ -7,13 +7,9 @@
 .buttons {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap
 }
 
-@media screen and (max-width: 1200px) {
-.buttons {
-  flex-wrap: wrap;
-}
-}
 
 /*Schaltflächen*/
 .buttons a {
@@ -29,7 +25,7 @@
     vertical-align: top;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.66)  ;
     font-weight: bold;
-
+    flex-wrap: wrap;
     min-width: 200px;
 
 }
