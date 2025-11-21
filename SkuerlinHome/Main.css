@@ -85,3 +85,11 @@ margin-top: 2px;
     font-weight: 600;
 
 }
+
+
+.discord {
+position:fixed;
+right: 0%;
+top: 20%;
+height: 320px;
+}
