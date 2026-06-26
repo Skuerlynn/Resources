@@ -386,7 +386,7 @@ RESETVALUES(spielermenge)
 
 
 
-function WINNER () {
+/*function WINNER () {
 
 
 if (players.slice(0, spielermenge).some(playerinline => playerinline.totalscore >= 200)) {
@@ -401,7 +401,5 @@ alert(WinnerNr)
 
 }
 
+*/
 
-
-// wenn einer am ende der runde 200 punkte hat gewinnt der spieler mit der höchsten punktzahl
-// wenn einer 7 karten hat (keine bonuskarten) ended die runde und derjenige bekommt 15 extrapunkteA

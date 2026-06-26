@@ -7,7 +7,7 @@
 </head>
 <body>
 
-<p class="Uberschrift"> Common <input type="text" class="Ysearchbar" placeholder="Youtube Search"> <a class = "Ysearch" href="#" target="_blank" id="YsearchLink"><img src="../IMG/lupe.png"></a></p>
+<p class="Uberschrift"> Common <input type="text" class="Ysearchbar" placeholder="Youtube Search"> <a class = "Ysearch" href="#" target="_blank" id="YsearchLink"><img src="../IMG/lupe.png"></a> <button  class = "TARGET" onclick="SWITCHTARGET()">New Tab</button>   </p>
 <div class="buttons">
 <a href="https://chatgpt.com" target="_blank"><img class = "bilder" src="../IMG/gbt.png"> ChatGBT </a>
 <a href="https://www.youtube.com" target="_blank"><img src="../IMG/yt.png">Youtube </a>
@@ -64,7 +64,7 @@
 <a href="C++.html"> C++  </a>
 <a href="HTML.html"> HTML </a>
 <a href="Javascript.html"> Javascript </a>
-</section>
+
 
 
 
@@ -74,9 +74,32 @@
 </body>
 
 <script>
+let target = 0
+
+function SWITCHTARGET() {
+
+    document.querySelectorAll("a").forEach(i => {
+        if (target == 1) {
+            i.target = "_blank";
+        } else {
+            i.removeAttribute("target");
+        }
+    });
+
+    if (target == 1) { target = 0 ;
+        document.querySelector(".TARGET").textContent = "New Tab";
+    } else { target = 1 ;
+        document.querySelector(".TARGET").textContent = "This Tab";
+    }
+
+//      target = target == 1 ? 0 : 1;
+// bessere alternative (ternäre Operator) "Wenn target gleich 1 ist, setze es auf 0, sonst setze es auf 1."
+}
   function setupSearch(inputSelector, linkId, buildUrl) {
     const input = document.querySelector(inputSelector);
     const link = document.getElementById(linkId);
+
+
 
     function performSearch() {
       const query = input.value.trim();

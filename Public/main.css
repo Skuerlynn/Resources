@@ -46,7 +46,7 @@ border-style: solid;
 padding: 5px
 }
 
-.project1 {
+.project1 , .project5{
 height: 600px;
 background-color: rgba(0, 0, 0, 0.537);
 margin-right: 10px;
@@ -56,14 +56,14 @@ border-style: solid;
 padding: 5px;
 position: relative;
 }
-.project1 img{
+.project1 img, .project5 img{
 height: 600px;
 background-color: rgba(0, 0, 0, 0.537);
 margin-right: 10px;
 margin-bottom: 10px;
 width: 1145px;
 }
-.project1 p{
+.project1 p, .project5 p{
 background-color: rgba(127, 172, 236, 0.847);
 position: absolute;
 left: 400px;
