@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Stundenplan EFI26A</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f3f5;
+            color: #222;
+        }
+
+        header {
+            background: #222;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0 0 5px;
+        }
+
+        #status {
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        .week {
+            margin-bottom: 35px;
+        }
+
+        .week-title {
+            margin-bottom: 10px;
+        }
+
+        .schedule {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+
+        .day {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .day-header {
+            background: #333;
+            color: white;
+            padding: 12px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .lesson {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            min-height: 90px;
+        }
+
+        .lesson:last-child {
+            border-bottom: none;
+        }
+
+        .period {
+            font-size: 12px;
+            color: #777;
+            margin-bottom: 5px;
+        }
+
+        .subject {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .room {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .teacher {
+            font-size: 13px;
+            color: #666;
+            margin-top: 3px;
+        }
+
+        .empty {
+            color: #aaa;
+            font-style: italic;
+        }
+
+        .substitution {
+            border-left: 5px solid #e74c3c;
+            background: #fff3f3;
+        }
+
+        .free {
+            opacity: 0.5;
+        }
+
+        .error {
+            background: #fff3f3;
+            border-left: 5px solid #e74c3c;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        @media (max-width: 900px) {
+
+            .schedule {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<header>
+
+    <h1>Stundenplan EFI26A</h1>
+
+    <div id="status">
+        Lade Stundenplan...
+    </div>
+
+</header>
+
+
+<div class="container">
+
+    <div id="stundenplan"></div>
+
+</div>
+
+
+<script>
+
+
+// --------------------------------------------------
+// Lokaler Proxy
+// --------------------------------------------------
+
+const API_URL = "/api/stundenplan";
+
+
+// --------------------------------------------------
+// Wochentage
+// --------------------------------------------------
+
+const tage = {
+
+    Mo: "Montag",
+    Di: "Dienstag",
+    Mi: "Mittwoch",
+    Do: "Donnerstag",
+    Fr: "Freitag"
+
+};
+
+
+// --------------------------------------------------
+// Unterrichtszeiten
+// --------------------------------------------------
+
+const stundenzeiten = {
+
+    1: "07:55 – 08:40",
+    2: "08:40 – 09:25",
+    3: "09:45 – 10:30",
+    4: "10:30 – 11:15",
+    5: "11:30 – 12:15",
+    6: "12:15 – 13:00",
+    7: "13:30 – 14:15",
+    8: "14:15 – 15:00"
+
+};
+
+
+// --------------------------------------------------
+// HTML escapen
+// --------------------------------------------------
+
+function escapeHTML(text) {
+
+    return String(text ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+}
+
+
+// --------------------------------------------------
+// Montag der aktuellen Woche bestimmen
+// --------------------------------------------------
+
+function montagDerWoche(date) {
+
+    const d = new Date(date);
+
+    const tag = d.getDay();
+
+    const diff = tag === 0
+        ? -6
+        : 1 - tag;
+
+    d.setDate(d.getDate() + diff);
+
+    d.setHours(0, 0, 0, 0);
+
+    return d;
+
+}
+
+
+// --------------------------------------------------
+// Datum in YYYY-MM-DD umwandeln
+// --------------------------------------------------
+
+function datumString(date) {
+
+    const jahr = date.getFullYear();
+
+    const monat = String(
+        date.getMonth() + 1
+    ).padStart(2, "0");
+
+    const tag = String(
+        date.getDate()
+    ).padStart(2, "0");
+
+    return `${jahr}-${monat}-${tag}`;
+
+}
+
+
+// --------------------------------------------------
+// Stundenplan laden
+// --------------------------------------------------
+
+async function ladeStundenplan() {
+
+    const status =
+        document.getElementById("status");
+
+    try {
+
+        status.textContent =
+            "Lade Stundenplan...";
+
+
+        const response = await fetch(API_URL, {
+            cache: "no-store"
+        });
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "HTTP Fehler " + response.status
+            );
+
+        }
+
+
+        const data = await response.json();
+
+
+        console.log(
+            "Geladene Stundenplan-Daten:",
+            data
+        );
+
+
+        zeigeStundenplan(data);
+
+
+        if (data.lastUpdate) {
+
+            const update =
+                new Date(data.lastUpdate);
+
+
+            if (!isNaN(update.getTime())) {
+
+                status.textContent =
+                    "Letzte Aktualisierung: " +
+                    update.toLocaleString("de-DE");
+
+            } else {
+
+                status.textContent =
+                    "Stundenplan erfolgreich geladen";
+
+            }
+
+        } else {
+
+            status.textContent =
+                "Stundenplan erfolgreich geladen";
+
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "Fehler beim Laden:",
+            error
+        );
+
+
+        status.textContent =
+            "Stundenplan konnte nicht geladen werden.";
+
+
+        document.getElementById(
+            "stundenplan"
+        ).innerHTML = `
+
+            <div class="error">
+
+                <strong>Fehler beim Laden des Stundenplans</strong>
+
+                <p>
+                    ${escapeHTML(error.message)}
+                </p>
+
+                <p>
+                    Prüfe, ob der Node.js-Server läuft.
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+// --------------------------------------------------
+// Stundenplan anzeigen
+// --------------------------------------------------
+
+function zeigeStundenplan(data) {
+
+    const container =
+        document.getElementById("stundenplan");
+
+
+    container.innerHTML = "";
+
+
+    const heute =
+        new Date();
+
+
+    const montag =
+        montagDerWoche(heute);
+
+
+    const wochenKey =
+        datumString(montag);
+
+
+    console.log(
+        "Gesuchte Woche:",
+        wochenKey
+    );
+
+
+    if (!data.weeks) {
+
+        container.innerHTML = `
+
+            <div class="error">
+
+                Die JSON-Datei enthält kein
+                <strong>weeks</strong>-Objekt.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    const week =
+        data.weeks[wochenKey];
+
+
+    if (!week) {
+
+        container.innerHTML = `
+
+            <div class="error">
+
+                <strong>
+                    Keine Daten für die aktuelle Woche gefunden.
+                </strong>
+
+                <p>
+                    Gesucht wurde nach:
+                    <strong>${wochenKey}</strong>
+                </p>
+
+                <p>
+                    Vorhandene Wochen:
+                    <br>
+                    ${Object.keys(data.weeks).join(", ")}
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    const weekElement =
+        document.createElement("div");
+
+
+    weekElement.className =
+        "week";
+
+
+    const titel =
+        document.createElement("h2");
+
+
+    titel.className =
+        "week-title";
+
+
+    titel.textContent =
+        "Woche ab " +
+        montag.toLocaleDateString("de-DE");
+
+
+    weekElement.appendChild(titel);
+
+
+    const schedule =
+        document.createElement("div");
+
+
+    schedule.className =
+        "schedule";
+
+
+    // --------------------------------------------------
+    // Montag bis Freitag
+    // --------------------------------------------------
+
+    for (const [code, name] of Object.entries(tage)) {
+
+
+        const day =
+            document.createElement("div");
+
+
+        day.className =
+            "day";
+
+
+        const header =
+            document.createElement("div");
+
+
+        header.className =
+            "day-header";
+
+
+        header.textContent =
+            name;
+
+
+        day.appendChild(header);
+
+
+        const lessons =
+            Array.isArray(week[code])
+                ? week[code]
+                : [];
+
+
+        // --------------------------------------------------
+        // Stunden sortieren
+        // --------------------------------------------------
+
+        lessons.sort((a, b) => {
+
+            return Number(a.std) - Number(b.std);
+
+        });
+
+
+        for (const lesson of lessons) {
+
+
+            const lessonData =
+                lesson.lessons?.[0];
+
+
+            if (!lessonData) {
+                continue;
+            }
+
+
+            const element =
+                document.createElement("div");
+
+
+            element.className =
+                "lesson";
+
+
+            if (lessonData.isSub) {
+
+                element.classList.add(
+                    "substitution"
+                );
+
+            }
+
+
+            // --------------------------------------------------
+            // Freistunde
+            // --------------------------------------------------
+
+            if (lessonData.subject === "-") {
+
+                element.classList.add("free");
+
+
+                element.innerHTML = `
+
+                    <div class="period">
+
+                        ${escapeHTML(lesson.std)}. Stunde
+
+                        ${
+                            stundenzeiten[lesson.std]
+                                ? " · " +
+                                  stundenzeiten[lesson.std]
+                                : ""
+                        }
+
+                    </div>
+
+
+                    <div class="empty">
+
+                        Frei
+
+                    </div>
+
+                `;
+
+            }
+
+
+            // --------------------------------------------------
+            // Normale Stunde
+            // --------------------------------------------------
+
+            else {
+
+                element.innerHTML = `
+
+                    <div class="period">
+
+                        ${escapeHTML(lesson.std)}. Stunde
+
+                        ${
+                            stundenzeiten[lesson.std]
+                                ? " · " +
+                                  stundenzeiten[lesson.std]
+                                : ""
+                        }
+
+                    </div>
+
+
+                    <div class="subject">
+
+                        ${escapeHTML(
+                            lessonData.subject
+                        )}
+
+                    </div>
+
+
+                    <div class="room">
+
+                        ${
+                            lessonData.room
+                                ? "Raum " +
+                                  escapeHTML(
+                                      lessonData.room
+                                  )
+                                : ""
+                        }
+
+                    </div>
+
+
+                    <div class="teacher">
+
+                        ${escapeHTML(
+                            lessonData.teacher
+                        )}
+
+                    </div>
+
+                `;
+
+            }
+
+
+            day.appendChild(element);
+
+        }
+
+
+        // Falls der Tag komplett leer ist
+
+        if (lessons.length === 0) {
+
+            const empty =
+                document.createElement("div");
+
+
+            empty.className =
+                "lesson free";
+
+
+            empty.innerHTML = `
+
+                <div class="empty">
+                    Keine Stunden eingetragen.
+                </div>
+
+            `;
+
+
+            day.appendChild(empty);
+
+        }
+
+
+        schedule.appendChild(day);
+
+    }
+
+
+    weekElement.appendChild(schedule);
+
+    container.appendChild(weekElement);
+
+}
+
+
+// --------------------------------------------------
+// Start
+// --------------------------------------------------
+
+ladeStundenplan();
+
+
+// --------------------------------------------------
+// Alle 5 Minuten aktualisieren
+// --------------------------------------------------
+
+setInterval(
+    ladeStundenplan,
+    5 * 60 * 1000
+);
+
+</script>
+
+</body>
+
+</html>

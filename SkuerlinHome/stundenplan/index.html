@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Stundenplan EFI26A</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f3f5;
+            color: #222;
+        }
+
+        header {
+            background: #222;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0 0 5px;
+        }
+
+        #status {
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        .week {
+            margin-bottom: 35px;
+        }
+
+        .week-title {
+            margin-bottom: 10px;
+        }
+
+        .schedule {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+
+        .day {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .day-header {
+            background: #333;
+            color: white;
+            padding: 12px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .lesson {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            min-height: 90px;
+        }
+
+        .lesson:last-child {
+            border-bottom: none;
+        }
+
+        .period {
+            font-size: 12px;
+            color: #777;
+            margin-bottom: 5px;
+        }
+
+        .subject {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .room {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .teacher {
+            font-size: 13px;
+            color: #666;
+            margin-top: 3px;
+        }
+
+        .empty {
+            color: #aaa;
+            font-style: italic;
+        }
+
+        .substitution {
+            border-left: 5px solid #e74c3c;
+            background: #fff3f3;
+        }
+
+        .free {
+            opacity: 0.5;
+        }
+
+        .error {
+            background: #fff3f3;
+            border-left: 5px solid #e74c3c;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        @media (max-width: 900px) {
+
+            .schedule {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<header>
+
+    <h1>Stundenplan EFI26A</h1>
+
+    <div id="status">
+        Lade Stundenplan...
+    </div>
+
+</header>
+
+
+<div class="container">
+
+    <div id="stundenplan"></div>
+
+</div>
+
+
+<script>
+
+
+// ==================================================
+// CLOUDFLARE WORKER
+// ==================================================
+//
+// Diese URL musst du nach dem Erstellen deines
+// Cloudflare Workers hier eintragen.
+//
+// Beispiel:
+//
+// https://stundenplan-proxy.DEIN-NAME.workers.dev
+//
+// ==================================================
+
+const API_URL =
+    "https://sp.pauljuliuswies.workers.dev/";
+
+
+const tage = {
+
+    Mo: "Montag",
+    Fr: "Freitag"
+
+};
+
+
+const stundenzeiten = {
+
+    1: "07:55 – 08:40",
+    2: "08:40 – 09:25",
+    3: "09:45 – 10:30",
+    4: "10:30 – 11:15",
+    5: "11:30 – 12:15",
+    6: "12:15 – 13:00",
+    7: "13:30 – 14:15",
+    8: "14:15 – 15:00"
+
+};
+
+
+// ==================================================
+// HTML escapen
+// ==================================================
+
+function escapeHTML(text) {
+
+    return String(text ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+}
+
+
+// ==================================================
+// Montag der aktuellen Woche
+// ==================================================
+
+function montagDerWoche(date) {
+
+    const d = new Date(date);
+
+    const tag = d.getDay();
+
+    const diff =
+        tag === 0
+            ? -6
+            : 1 - tag;
+
+    d.setDate(
+        d.getDate() + diff
+    );
+
+    d.setHours(
+        0,
+        0,
+        0,
+        0
+    );
+
+    return d;
+
+}
+
+
+// ==================================================
+// Datum als DD.MM.YYYY
+// ==================================================
+
+function datumString(date) {
+
+    const tag =
+        String(
+            date.getDate()
+        ).padStart(2, "0");
+
+    const monat =
+        String(
+            date.getMonth() + 1
+        ).padStart(2, "0");
+
+    const jahr =
+        date.getFullYear();
+
+    return `${tag}.${monat}.${jahr}`;
+
+}
+
+
+// ==================================================
+// Stundenplan laden
+// ==================================================
+
+async function ladeStundenplan() {
+
+    const status =
+        document.getElementById("status");
+
+    const container =
+        document.getElementById("stundenplan");
+
+
+    try {
+
+        status.textContent =
+            "Lade Stundenplan...";
+
+
+        const response =
+            await fetch(API_URL, {
+                cache: "no-store"
+            });
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                `HTTP Fehler ${response.status}`
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        console.log(
+            "Stundenplan:",
+            data
+        );
+
+
+        zeigeStundenplan(data);
+
+
+        if (data.lastUpdate) {
+
+            const update =
+                new Date(
+                    data.lastUpdate
+                );
+
+
+            if (
+                !isNaN(
+                    update.getTime()
+                )
+            ) {
+
+                status.textContent =
+                    "Letzte Aktualisierung: " +
+                    update.toLocaleString(
+                        "de-DE"
+                    );
+
+            } else {
+
+                status.textContent =
+                    "Stundenplan geladen";
+
+            }
+
+        } else {
+
+            status.textContent =
+                "Stundenplan geladen";
+
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "Fehler:",
+            error
+        );
+
+
+        status.textContent =
+            "Fehler beim Laden";
+
+
+        container.innerHTML = `
+
+            <div class="error">
+
+                <strong>
+                    Stundenplan konnte nicht geladen werden.
+                </strong>
+
+                <p>
+                    ${escapeHTML(error.message)}
+                </p>
+
+                <p>
+                    Der Online-Proxy ist möglicherweise
+                    noch nicht eingerichtet.
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+// ==================================================
+// Stundenplan anzeigen
+// ==================================================
+
+function zeigeStundenplan(data) {
+
+    const container =
+        document.getElementById(
+            "stundenplan"
+        );
+
+
+    container.innerHTML = "";
+
+
+    if (!data.weeks) {
+
+        container.innerHTML = `
+
+            <div class="error">
+
+                <strong>
+                    Fehlerhafte JSON-Daten
+                </strong>
+
+                <p>
+                    Kein "weeks"-Objekt gefunden.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    const heute =
+        new Date();
+
+
+    const montag =
+        montagDerWoche(
+            heute
+        );
+
+
+    const wochenKey =
+        datumString(
+            montag
+        );
+
+
+    console.log(
+        "Gesuchte Woche:",
+        wochenKey
+    );
+
+
+    const week =
+        data.weeks[
+            wochenKey
+        ];
+
+
+    if (!week) {
+
+        const vorhandeneWochen =
+            Object.keys(
+                data.weeks
+            );
+
+
+        container.innerHTML = `
+
+            <div class="error">
+
+                <strong>
+                    Keine Daten für die aktuelle Woche gefunden.
+                </strong>
+
+                <p>
+                    Gesucht:
+                    <strong>
+                        ${escapeHTML(wochenKey)}
+                    </strong>
+                </p>
+
+                <p>
+                    Vorhandene Wochen:
+                    <br>
+                    ${
+                        vorhandeneWochen
+                            .map(escapeHTML)
+                            .join(", ")
+                    }
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    const weekElement =
+        document.createElement(
+            "div"
+        );
+
+
+    weekElement.className =
+        "week";
+
+
+    const titel =
+        document.createElement(
+            "h2"
+        );
+
+
+    titel.className =
+        "week-title";
+
+
+    titel.textContent =
+        "Woche ab " +
+        montag.toLocaleDateString(
+            "de-DE"
+        );
+
+
+    weekElement.appendChild(
+        titel
+    );
+
+
+    const schedule =
+        document.createElement(
+            "div"
+        );
+
+
+    schedule.className =
+        "schedule";
+
+
+    for (
+        const [code, name]
+        of Object.entries(tage)
+    ) {
+
+
+        const day =
+            document.createElement(
+                "div"
+            );
+
+
+        day.className =
+            "day";
+
+
+        const header =
+    document.createElement("div");
+
+header.className =
+    "day-header";
+
+const tagesDatum =
+    new Date(montag);
+
+const tageOffset = {
+    Mo: 0,
+    Fr: 4
+};
+
+tagesDatum.setDate(
+    montag.getDate() + tageOffset[code]
+);
+
+header.innerHTML = `
+    <div>${name}</div>
+    <div style="
+        font-size: 13px;
+        font-weight: normal;
+        opacity: 0.75;
+        margin-top: 4px;
+    ">
+        ${tagesDatum.toLocaleDateString("de-DE")}
+    </div>
+`;
+
+day.appendChild(header);
+
+
+        let lessons =
+            Array.isArray(
+                week[code]
+            )
+                ? [
+                    ...week[code]
+                ]
+                : [];
+
+
+        lessons.sort(
+            (a, b) =>
+                Number(a.std) -
+                Number(b.std)
+        );
+
+
+        if (
+            lessons.length === 0
+        ) {
+
+            const empty =
+                document.createElement(
+                    "div"
+                );
+
+
+            empty.className =
+                "lesson free";
+
+
+            empty.innerHTML = `
+
+                <div class="empty">
+                    Keine Stunden eingetragen.
+                </div>
+
+            `;
+
+
+            day.appendChild(
+                empty
+            );
+
+        }
+
+
+        for (
+            const lesson
+            of lessons
+        ) {
+
+
+            const lessonData =
+                lesson.lessons?.[0];
+
+
+            if (!lessonData) {
+                continue;
+            }
+
+
+            const element =
+                document.createElement(
+                    "div"
+                );
+
+
+            element.className =
+                "lesson";
+
+
+            if (
+                lessonData.isSub
+            ) {
+
+                element.classList.add(
+                    "substitution"
+                );
+
+            }
+
+
+            const std =
+                lesson.std;
+
+
+            const zeit =
+                stundenzeiten[std]
+                    ? " · " +
+                      stundenzeiten[std]
+                    : "";
+
+
+            if (
+                lessonData.subject === "-"
+            ) {
+
+                element.classList.add(
+                    "free"
+                );
+
+
+                element.innerHTML = `
+
+                    <div class="period">
+
+                        ${escapeHTML(std)}. Stunde
+                        ${zeit}
+
+                    </div>
+
+                    <div class="empty">
+                        Frei
+                    </div>
+
+                `;
+
+            } else {
+
+
+                const subject =
+                    escapeHTML(
+                        lessonData.subject
+                    );
+
+
+                const room =
+                    escapeHTML(
+                        lessonData.room || ""
+                    );
+
+
+                const teacher =
+                    escapeHTML(
+                        lessonData.teacher || ""
+                    );
+
+
+                element.innerHTML = `
+
+                    <div class="period">
+
+                        ${escapeHTML(std)}. Stunde
+                        ${zeit}
+
+                    </div>
+
+
+                    <div class="subject">
+
+                        ${subject}
+
+                    </div>
+
+
+                    ${
+                        room
+                            ? `
+                                <div class="room">
+                                    Raum ${room}
+                                </div>
+                              `
+                            : ""
+                    }
+
+
+                    ${
+                        teacher
+                            ? `
+                                <div class="teacher">
+                                    ${teacher}
+                                </div>
+                              `
+                            : ""
+                    }
+
+                `;
+
+            }
+
+
+            day.appendChild(
+                element
+            );
+
+        }
+
+
+        schedule.appendChild(
+            day
+        );
+
+    }
+
+
+    weekElement.appendChild(
+        schedule
+    );
+
+
+    container.appendChild(
+        weekElement
+    );
+
+}
+
+
+// ==================================================
+// Start
+// ==================================================
+
+ladeStundenplan();
+
+
+// ==================================================
+// Alle 5 Minuten aktualisieren
+// ==================================================
+
+setInterval(
+    ladeStundenplan,
+    5 * 60 * 1000
+);
+
+
+</script>
+
+</body>
+
+</html>
