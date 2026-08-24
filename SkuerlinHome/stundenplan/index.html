@@ -432,74 +432,113 @@ function zeigeStundenplan(data) {
     }
 
 
-    const heute =
-        new Date();
+   const heute = new Date();
+
+const montag =
+    montagDerWoche(heute);
+
+const aktuelleWochenKey =
+    datumString(montag);
 
 
-    const montag =
-        montagDerWoche(
-            heute
-        );
+// Alle vorhandenen Wochen
+const vorhandeneWochen =
+    Object.keys(data.weeks);
 
 
-    const wochenKey =
-        datumString(
-            montag
-        );
+// --------------------------------------------------
+// Aktuelle Woche suchen
+// --------------------------------------------------
+
+let wochenKey =
+    aktuelleWochenKey;
 
 
-    console.log(
-        "Gesuchte Woche:",
-        wochenKey
-    );
+// --------------------------------------------------
+// Falls aktuelle Woche nicht vorhanden ist:
+// nächste verfügbare Woche nehmen
+// --------------------------------------------------
 
+if (!data.weeks[wochenKey]) {
 
-    const week =
-        data.weeks[
-            wochenKey
-        ];
+    const naechsteWoche =
+        vorhandeneWochen
+            .map(key => {
 
+                const [tag, monat, jahr] =
+                    key.split(".");
 
-    if (!week) {
+                return {
+                    key: key,
+                    date: new Date(
+                        Number(jahr),
+                        Number(monat) - 1,
+                        Number(tag)
+                    )
+                };
 
-        const vorhandeneWochen =
-            Object.keys(
-                data.weeks
+            })
+            .filter(item =>
+                item.date >= montag
+            )
+            .sort(
+                (a, b) =>
+                    a.date - b.date
             );
 
 
-        container.innerHTML = `
+    if (naechsteWoche.length > 0) {
 
-            <div class="error">
-
-                <strong>
-                    Keine Daten für die aktuelle Woche gefunden.
-                </strong>
-
-                <p>
-                    Gesucht:
-                    <strong>
-                        ${escapeHTML(wochenKey)}
-                    </strong>
-                </p>
-
-                <p>
-                    Vorhandene Wochen:
-                    <br>
-                    ${
-                        vorhandeneWochen
-                            .map(escapeHTML)
-                            .join(", ")
-                    }
-                </p>
-
-            </div>
-
-        `;
-
-        return;
+        wochenKey =
+            naechsteWoche[0].key;
 
     }
+
+}
+
+
+// --------------------------------------------------
+// Gewählte Woche
+// --------------------------------------------------
+
+const week =
+    data.weeks[wochenKey];
+
+
+if (!week) {
+
+    container.innerHTML = `
+
+        <div class="error">
+
+            <strong>
+                Kein Stundenplan gefunden.
+            </strong>
+
+            <p>
+                Gesucht:
+                <strong>
+                    ${escapeHTML(aktuelleWochenKey)}
+                </strong>
+            </p>
+
+            <p>
+                Vorhandene Wochen:
+                <br>
+                ${
+                    vorhandeneWochen
+                        .map(escapeHTML)
+                        .join(", ")
+                }
+            </p>
+
+        </div>
+
+    `;
+
+    return;
+
+}
 
 
     const weekElement =
@@ -522,11 +561,22 @@ function zeigeStundenplan(data) {
         "week-title";
 
 
-    titel.textContent =
-        "Woche ab " +
-        montag.toLocaleDateString(
-            "de-DE"
-        );
+const [tag, monat, jahr] =
+    wochenKey.split(".");
+
+const angezeigterMontag =
+    new Date(
+        Number(jahr),
+        Number(monat) - 1,
+        Number(tag)
+    );
+
+
+titel.textContent =
+    "Woche ab " +
+    angezeigterMontag.toLocaleDateString(
+        "de-DE"
+    );
 
 
     weekElement.appendChild(
